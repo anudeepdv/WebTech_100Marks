@@ -1,0 +1,191 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<script>
+load = function () {
+    
+     var res;
+     getDetails =function(){
+        positive=[];
+        negative=[];
+        if(xhr.readyState==4 && xhr.status==200)
+            {
+                res = JSON.parse(xhr.response)
+                console.log(res["reviews"].length);
+                for (var i = 0; i < res["reviews"].length; i++) {
+                    console.log(res["reviews"][i]);
+                    temp_pos = {x:new Date(res["reviews"][i][0]), y:res["reviews"][i][1]};
+                    temp_neg = {x:new Date(res["reviews"][i][0]), y:res["reviews"][i][2]};
+                    positive.push(temp_pos);
+                    negative.push(temp_neg);
+                    
+                }
+                console.log(positive)
+
+                var chart = new CanvasJS.Chart("chartContainer", {
+                    animationEnabled: true,
+                    theme: "light2",
+                    title:{
+                        text: "Sentiment graph"
+                    },
+                    axisX:{
+                        valueFormatString: "DD MMM",
+                        crosshair: {
+                            enabled: true,
+                            snapToDataPoint: true
+                        }
+                    },
+                    axisY: {
+                        title: "Magnitude",
+                        crosshair: {
+                            enabled: true
+                        }
+                    },
+                    toolTip:{
+                        shared:true
+                    },  
+                    legend:{
+                        cursor:"pointer",
+                        verticalAlign: "bottom",
+                        horizontalAlign: "left",
+                        dockInsidePlotArea: true,
+                        itemclick: toogleDataSeries
+                    },
+                    data: [{
+                        type: "line",
+                        showInLegend: true,
+                        name: "Negative review",
+                        markerType: "square",
+                        xValueFormatString: "DD MMM, YYYY",
+                        color: "#F08080",
+                        dataPoints: negative
+                    },
+                    {
+                        type: "line",
+                        showInLegend: true,
+                        name: "Positive review",
+                        lineDashType: "dash",
+                        dataPoints: positive
+                    }]
+                });
+                chart.render();
+
+                            }
+                    };
+    var xhr = new XMLHttpRequest;
+    xhr.onreadystatechange = getDetails;
+    xhr.open("GET","http://127.0.0.1:5000/getlinevalues?id=ML001",true);
+    xhr.send();
+   
+   
+
+
+function toogleDataSeries(e){
+	if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+		e.dataSeries.visible = false;
+	} else{
+		e.dataSeries.visible = true;
+	}
+	chart.render();
+}
+
+}
+</script>
+</head>
+<body >
+    
+    
+    
+<div id="chartContainer" style="height: 370px; width: 100%;">
+    <script>
+    var res;
+     getDetails =function(){
+        positive=[];
+        negative=[];
+        if(xhr.readyState==4 && xhr.status==200)
+            {
+                res = JSON.parse(xhr.response)
+                console.log(res["reviews"].length);
+                for (var i = 0; i < res["reviews"].length; i++) {
+                    console.log(res["reviews"][i]);
+                    temp_pos = {x:new Date(res["reviews"][i][0]), y:res["reviews"][i][1]};
+                    temp_neg = {x:new Date(res["reviews"][i][0]), y:res["reviews"][i][2]};
+                    positive.push(temp_pos);
+                    negative.push(temp_neg);
+                    
+                }
+                console.log(positive)
+
+                var chart = new CanvasJS.Chart("chartContainer", {
+                    animationEnabled: true,
+                    theme: "light2",
+                    title:{
+                        text: "Sentiment graph"
+                    },
+                    axisX:{
+                        valueFormatString: "DD MMM",
+                        crosshair: {
+                            enabled: true,
+                            snapToDataPoint: true
+                        }
+                    },
+                    axisY: {
+                        title: "Magnitude",
+                        crosshair: {
+                            enabled: true
+                        }
+                    },
+                    toolTip:{
+                        shared:true
+                    },  
+                    legend:{
+                        cursor:"pointer",
+                        verticalAlign: "bottom",
+                        horizontalAlign: "left",
+                        dockInsidePlotArea: true,
+                        itemclick: toogleDataSeries
+                    },
+                    data: [{
+                        type: "line",
+                        showInLegend: true,
+                        name: "Negative review",
+                        markerType: "square",
+                        xValueFormatString: "DD MMM, YYYY",
+                        color: "#F08080",
+                        dataPoints: negative
+                    },
+                    {
+                        type: "line",
+                        showInLegend: true,
+                        name: "Positive review",
+                        lineDashType: "dash",
+                        dataPoints: positive
+                    }]
+                });
+                chart.render();
+
+                            }
+                    };
+    var xhr = new XMLHttpRequest;
+    xhr.onreadystatechange = getDetails;
+    xhr.open("GET","http://127.0.0.1:5000/getlinevalues?id=ML001",true);
+    xhr.send();
+   
+   
+
+
+function toogleDataSeries(e){
+	if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+		e.dataSeries.visible = false;
+	} else{
+		e.dataSeries.visible = true;
+	}
+	chart.render();
+}
+    </script></div>
+    
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    
+    
+</body>
+</html>

@@ -1,0 +1,76 @@
+<html>
+<head>
+	<style>
+		#container{
+			border:solid 1px black;
+			display:none
+		}
+		.Courseitem{
+			background-color:beige;
+			color:black;	
+		}
+		.Courseitem:hover{
+			background-color:white;
+		}
+	</style>
+	<script>
+		var object ={
+			xhr:new XMLHttpRequest(),
+			getTerm:function(){
+                console.log("in getTerm");
+                if(this.timer)
+                    {
+                        clearTimeout(this.timer);
+                    }
+				this.timer = setTimeout(object.sendTerm,1000);
+			},
+			sendTerm:function(){
+				var url = "http://127.0.0.1:5000/subm_throt?term=";
+				object.search = document.getElementById("search");
+                object.container =document.getElementById("container");
+                object.xhr.onreadystatechange = object.showResult;
+                object.xhr.open("GET",url+object.search.value);
+                object.xhr.responseType="json";
+                object.xhr.send();
+			},
+			showResult:function(){
+                if(this.readyState == 4 && this.status==200)
+                console.log(this.response);
+				var resobj = this.response;
+				console.log(this.response["course_name"]);
+                if(resobj.length==0){
+                    object.search.style.backgroundColor = "red";
+                    object.search.style.fontStyle="italic";
+                }
+                else{
+                    object.search.style.backgroundColor="white";
+                    object.search.style.fontStyle=""
+                    object.populateCourse(resobj["course_name"]);
+                    
+                }
+                
+                
+			},
+			populateCourse:function(resO){
+                object.container.innerHTML="";
+                for( f in resO){
+                    var iDiv = document.createElement("div");
+                    iDiv.innerHTML = resO[f];
+                    iDiv.className="Course item";
+                    object.container.appendChild(iDiv);
+                }
+                
+                object.container.style.display="block";
+				
+			}
+		};
+		
+		</script>
+	</head>
+	<body>
+		<table border="0" cellpadding="0">
+		<tr><td>Course</td><td><input type="text" id="search" onkeypress="object.getTerm()" /></td></tr>
+		<tr><td></td><td><div id="container"></td></div></tr>
+		</table>
+	</body>
+</html>

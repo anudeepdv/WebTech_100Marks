@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<script>
+window.onload = function() {
+    
+     var respie;
+     getdetailspiepie =function(){
+       detailspie=[]
+        if(xhrpie.readyState==4 && xhrpie.status==200)
+            {
+                respie = JSON.parse(xhrpie.response)
+                console.log(respie["rating"].reduce((a, b) => a + b, 0));
+                sumpie = respie["rating"].reduce((a, b) => a + b, 0);
+                console.log(respie);
+                for (var i = 0; i < respie["rating"].length; i++) {
+                    temppie = {y:respie["rating"][i]*100/sumpie, label:respie["course_names"][i]};
+                    detailspie.push(temppie);
+                    
+                    
+                }
+                
+var chartpie = new CanvasJS.Chart("piecharContainer", {
+	animationEnabled: true,
+	title: {
+		text: "Courses ratings"
+	},
+	data: [{
+		type: "pie",
+		startAngle: 240,
+		yValueFormatString: "##0.00\"%\"",
+		indexLabel: "{label} {y}",
+		dataPoints:detailspie
+	}]
+});
+chartpie.render();
+                
+                console.log(detailspie)
+                 }
+     }
+    var xhrpie = new XMLHttpRequest;
+    xhrpie.onreadystatechange = getdetailspiepie;
+    xhrpie.open("GET","http://127.0.0.1:5000/getTopn?n=1",true);
+    xhrpie.send();
+
+
+}
+</script>
+</head>
+<body>
+<div id="piecharContainer" style="height: 370px; width: 100%;"></div>
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+</body>
+</html>
